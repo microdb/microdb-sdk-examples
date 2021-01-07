@@ -1,0 +1,15 @@
+
+publish
+node_modules
+
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+
+# Log files
+*.log

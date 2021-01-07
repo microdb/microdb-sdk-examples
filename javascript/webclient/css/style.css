@@ -1,0 +1,73 @@
+body {
+  width: 80%;
+  margin: auto;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+table tr td{
+  border-bottom:1px solid #ccc;
+}
+
+table tr td{
+  padding:4px;
+}
+
+.wrapper {
+  display: flex;
+  width: 100%;
+  margin: auto;
+}
+
+.wrapper .left {
+  border-right: 1px solid;
+  width: 20%;
+  height: 85vh;
+}
+
+.wrapper .left ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+.wrapper .left ul li {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.wrapper .left ul li:hover {
+  background-color: #ccc
+}
+
+.wrapper .main {
+  width: 80%;
+  padding-left: 20px;
+  height: 85vh;
+  overflow-y: auto;
+}
+
+.dynamic-data-entry .form div{
+  width: 50%;
+  margin-bottom: 7px;
+}
+.dynamic-data-entry .form label{
+  width: 30%;
+  display: inline-block;
+}
+
+.m0 {
+  margin: 0px;
+}
+
+.mb {
+  margin-bottom: 20px;
+}
+
+.mt {
+  margin-top: 20px;
+}
+
+.hidden {
+  display: none;
+}
