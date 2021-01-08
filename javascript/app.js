@@ -35,6 +35,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //HOOKING UP THE APP ROUTES HERE
 approutes.init(app);
 
+
 env('./envVars.txt');
 
 var port = normalizePort(process.env.SERVER_PORT);
