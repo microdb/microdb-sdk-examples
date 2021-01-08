@@ -1,6 +1,6 @@
 {
-  "name": "microdb_server_api",
-  "version": "1.0.0",
+  "name": "microdb-sdk-ex-js",
+  "version": "1.0.1",
   "main": "app.js",
   "private": true,
   "dependencies": {
