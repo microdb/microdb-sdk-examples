@@ -55,7 +55,7 @@ function OnSave(req, res, next) {
     row[key] = value;
   }
 
-  microdb.Tables[req.body.data.table].saveNew(row).then(onSaveData);
+  microdb.Tables[req.body.data.table].add(row).then(onSaveData);
 
   function onSaveData(gcRes) {
     if (gcRes.success) {
