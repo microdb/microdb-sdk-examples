@@ -3,7 +3,7 @@
 
 Use this application to quickly see how easy it is to connect an app to your custom database on https://www.microdb.co
 
-## Total Time: 10 minutes
+### Total Time: 10 minutes
 
 ## Get Started
 
