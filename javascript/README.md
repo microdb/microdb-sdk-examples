@@ -1,6 +1,6 @@
 
 # Example for Node JS apps
-test
+
 
 Use this application to quickly see how easy it is to connect an app to your custom database on https://www.microdb.co
 
