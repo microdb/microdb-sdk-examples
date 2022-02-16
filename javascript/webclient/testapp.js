@@ -24,8 +24,8 @@
           $('.left ul').append(el);
         }
       });
-      $('#createData').on('click', function(){showDynamicForm();});
-      $('.btn-save').on('click',SaveForm);
+      $('#createData').on('click', function () { showDynamicForm(); });
+      $('.btn-save').on('click', SaveForm);
     });
   }
 
@@ -41,20 +41,9 @@
           myapp.currentTable = element;
         }
       }
-      setTable();
+      $('#cust-tbl thead,#cust-tbl tbody').empty();
+      myapp.getData().then(onData);
     }
-  }
-
-  function setTable() {
-    $('#cust-tbl thead,#cust-tbl tbody').empty();
-    var tableDOMRow = $('<tr>');
-    $.each(myapp.currentTable.columns, function (idx, col) {
-      //need to simplify the columns to a standard format so thres no confusion
-      tableDOMRow.append('<td>' + col.Name + '</td>');
-    });
-    tableDOMRow.append('<td></td>');
-    $('#cust-tbl thead').append(tableDOMRow);
-    myapp.getData().then(onData);
   }
 
   function getTables(opts) {
@@ -72,6 +61,18 @@
     if (res.success) {
       if (res.data.Rows.length > 0) {
         dataCache = res.data.Rows;
+
+        //set table header
+        var datarow = dataCache[0];
+        var hdrCols = Object.keys(datarow);
+        var hdrRow = $('<tr>');
+        $.each(hdrCols, function (idx, col) {
+          var dd = myapp.currentTable.columns.find(function (e) { return e.FormattedName == col; });
+          hdrRow.append('<td>' + dd.Name + '</td>');
+        });
+        hdrRow.append('<td></td>');
+        $('#cust-tbl thead').append(hdrRow);
+
         for (var index = 0; index < dataCache.length; index++) {
           const datarow = dataCache[index];
           var tableDOMRow = $('<tr>');
@@ -97,7 +98,7 @@
       var bad = res.message;
     }
 
-   
+
   }
 
   function OnEditBtnClick(evt) {
@@ -110,40 +111,46 @@
   function showDynamicForm(id) {
 
     $('.dynamic-data-entry .form').empty();
+    $('.table-container').hide();
+    $('.dynamic-data-entry').show();
+
     if (id) {
       //is edit
-      for (var index = 0; index < dataCache.length; index++) {
-        const datarow = dataCache[index];
-        var tableDOMRow = $('<tr>');
-        var columns = Object.keys(datarow);
-        for (var elIdx = 0; elIdx < columns.length; elIdx++) {
-          var c = datarow[columns[elIdx]];
-          tableDOMRow.append('<td>' + c + '</td>');
-        }
-        var btn = document.createElement('BUTTON');
-        btn.type = 'button';
-        btn.innerText = 'edit';
-        btn.setAttribute('data-id', datarow.primarykey);
-        btn.addEventListener('click', OnEditBtnClick, { useCapture: true });
+      $('.dynamic-data-entry .tblname').text('Edit row in ' + myapp.currentTable.name);
+      const datarow = dataCache.find(function (e) { return e.primarykey == id; });
+      var columns = Object.keys(datarow);
 
-        var td = $('<td>');
-        td.append(btn);
-        tableDOMRow.append(td)
-        $('#cust-tbl tbody').append(tableDOMRow);
+     
+      for (var index = 0; index < columns.length; index++) {
+        if (columns[index] == 'primarykey') {
+          continue;
+        }
+
+        var formField = $('<div>');
+        var lbl = document.createElement('LABEL');
+        lbl.innerText = myapp.currentTable.columns.find(function (e) { return e.FormattedName == columns[index]; }).Name;
+        formField.append(lbl);
+
+        var datavalueFieldType;
+        datavalueFieldType = document.createElement('input');
+        datavalueFieldType.type = 'text';
+        datavalueFieldType.value = datarow[columns[index]];
+
+        datavalueFieldType.setAttribute('data-columnname', columns[index]);
+        formField.append(datavalueFieldType);
+        $('.dynamic-data-entry .form').append(formField);
       }
     }
     else {
       // is new
-      $('.dynamic-data-entry .tblname').text('Add data to '+myapp.currentTable.name);
+      $('.dynamic-data-entry .tblname').text('Add data to ' + myapp.currentTable.name);
       for (var index = 0; index < myapp.currentTable.columns.length; index++) {
         const column = myapp.currentTable.columns[index];
-        if(column.FormattedName=='primarykey'){
+        if (column.FormattedName == 'primarykey') {
           continue;
         }
-        
-        
 
-        var formField=$('<div>');
+        var formField = $('<div>');
         var lbl = document.createElement('LABEL');
         lbl.innerText = column.Name;
         formField.append(lbl);
@@ -151,34 +158,33 @@
         var datavalueFieldType;
         switch (column.DataType) {
           case 'datetime':
-              datavalueFieldType= document.createElement('input');
-              datavalueFieldType.type = 'datetime-local';
+            datavalueFieldType = document.createElement('input');
+            datavalueFieldType.type = 'datetime-local';
             break;
           default:
-              datavalueFieldType= document.createElement('input');
-              datavalueFieldType.type = 'text';
+            datavalueFieldType = document.createElement('input');
+            datavalueFieldType.type = 'text';
             break;
         }
-        
-        datavalueFieldType.setAttribute('data-columnname',column.FormattedName);
-        
+
+        datavalueFieldType.setAttribute('data-columnname', column.FormattedName);
+
         formField.append(datavalueFieldType);
         $('.dynamic-data-entry .form').append(formField);
       }
     }
 
-    $('.table-container').hide();
-    $('.dynamic-data-entry').show();
+
 
   }
 
   function SaveForm() {
-    var req={
+    var req = {
       table: myapp.currentTable.name,
-      data:[]
+      data: []
     };
 
-    $('.dynamic-data-entry .form input').each(function(idx,ele){
+    $('.dynamic-data-entry .form input').each(function (idx, ele) {
       req.data.push({
         column: $(ele).attr('data-columnname'),
         value: $(ele).val()
@@ -257,7 +263,7 @@
 
   init();
 
-  
+
 
 })();
 
