@@ -1,7 +1,7 @@
 
 publish
 node_modules
-
+microdb_output
 
 # OS Files
 .DS_Store
