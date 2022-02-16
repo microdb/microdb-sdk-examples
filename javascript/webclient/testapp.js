@@ -20,7 +20,7 @@
           const element = myapp.Tables[index];
           var el = document.createElement('li');
           el.innerText = element.name;
-          el.addEventListener('click', OnClick, { useCapture: true });
+          el.addEventListener('click', OnTableNameClick, { useCapture: true });
           $('.left ul').append(el);
         }
       });
@@ -30,7 +30,7 @@
   }
 
 
-  function OnClick(evt) {
+  function OnTableNameClick(evt) {
     // evt.stopPropagation();
     $('.table-container').show();
     $('.dynamic-data-entry').hide();
@@ -84,7 +84,7 @@
           btn.type = 'button';
           btn.innerText = 'edit';
           btn.setAttribute('data-id', datarow.primarykey);
-          btn.addEventListener('click', OnBtnClick, { useCapture: true });
+          btn.addEventListener('click', OnEditBtnClick, { useCapture: true });
 
           var td = $('<td>');
           td.append(btn);
@@ -100,7 +100,7 @@
    
   }
 
-  function OnBtnClick(evt) {
+  function OnEditBtnClick(evt) {
     if (evt.target) {
       var id = evt.target.getAttribute('data-id');
       showDynamicForm(id);
@@ -124,7 +124,7 @@
         btn.type = 'button';
         btn.innerText = 'edit';
         btn.setAttribute('data-id', datarow.primarykey);
-        btn.addEventListener('click', OnBtnClick, { useCapture: true });
+        btn.addEventListener('click', OnEditBtnClick, { useCapture: true });
 
         var td = $('<td>');
         td.append(btn);
