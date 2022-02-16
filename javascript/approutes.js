@@ -1,7 +1,7 @@
 var
   common = require('./common'),
   microdb = require('microdb-api')(process.env.MICRODB_APIKEY)
-;
+  ;
 
 function init(app) {
   app.get('/', homepage);
@@ -18,7 +18,7 @@ function homepage(req, res) {
 function OnTablesGet(req, res, next) {
   if (microdb.Init) {
     var response = new common.response();
-     microdb.getTables().then(function (tbRes) {
+    microdb.getTables().then(function (tbRes) {
       response.data = { Tables: tbRes };
       res.status(200).send(response);
     });
@@ -31,7 +31,7 @@ function OnGet(req, res, next) {
 
   //here we are accepting the table passed in from the client
   microdb.Tables[req.body.data.table].get({ pageSize: 100 }).then(onData);
-  
+
   function onData(gcRes) {
     if (gcRes.success) {
       res.status(200).send(gcRes);
@@ -47,15 +47,26 @@ function OnGet(req, res, next) {
 
 // here we are accepting whatever the client is passing in to save
 function OnSave(req, res, next) {
-  var row ={};
+  var hasprimarykey = false;
+  var row = {};
   var columns = req.body.data.data;
   for (var i = 0; i < columns.length; i++) {
     var key = columns[i].column;
     var value = columns[i].value;
     row[key] = value;
+
+    if (key == 'primarykey') {
+      hasprimarykey = true;
+    }
+  }
+  
+  if (hasprimarykey) {
+    microdb.Tables[req.body.data.table].update(row).then(onSaveData);
+  }
+  else {
+    microdb.Tables[req.body.data.table].add(row).then(onSaveData);
   }
 
-  microdb.Tables[req.body.data.table].add(row).then(onSaveData);
 
   function onSaveData(gcRes) {
     if (gcRes.success) {

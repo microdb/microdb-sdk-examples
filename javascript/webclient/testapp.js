@@ -119,12 +119,8 @@
       $('.dynamic-data-entry .tblname').text('Edit row in ' + myapp.currentTable.name);
       const datarow = dataCache.find(function (e) { return e.primarykey == id; });
       var columns = Object.keys(datarow);
-
      
       for (var index = 0; index < columns.length; index++) {
-        if (columns[index] == 'primarykey') {
-          continue;
-        }
 
         var formField = $('<div>');
         var lbl = document.createElement('LABEL');
@@ -135,6 +131,10 @@
         datavalueFieldType = document.createElement('input');
         datavalueFieldType.type = 'text';
         datavalueFieldType.value = datarow[columns[index]];
+         if (columns[index] == 'primarykey') {
+          datavalueFieldType.readOnly=true;
+          datavalueFieldType.disabled=true;
+        }
 
         datavalueFieldType.setAttribute('data-columnname', columns[index]);
         formField.append(datavalueFieldType);
@@ -191,12 +191,14 @@
       });
     });
     saveData(req);
+    
   }
 
   function saveData(options) {
     return postMsg('data/save', options);
   }
 
+  
   function postMsg(route, data) {
 
     return new Promise((resolve) => {
