@@ -59,6 +59,16 @@
 
   function onData(res) {
     if (res.success) {
+
+      if (res.data.Rows.length == 0) {
+        var hdrRow = $('<tr>');
+        $.each(myapp.currentTable.columns, function (idx, col) {
+          hdrRow.append('<td>' + col.FormattedName + '</td>');
+        });
+        hdrRow.append('<td></td>');
+        $('#cust-tbl thead').append(hdrRow);
+      }
+
       if (res.data.Rows.length > 0) {
         dataCache = res.data.Rows;
 
